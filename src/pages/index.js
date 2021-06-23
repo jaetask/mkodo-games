@@ -21,10 +21,12 @@ const GamesList = ({ games, api }) => {
             className="bg-gray-200 text-gray-800 hover:bg-green-600 hover:text-white text-xl rounded border-2 p-8 text-center capitalize"
             onClick={() => api.selectGame(game.id)}
           >
+            {/* TODO:
             <div>{game.tagLine}</div>
             <div>{game.image}</div>
             <div>{game.name}</div>
-            <div>{game.description}</div>
+            <div>{game.description}</div> 
+            */}
           </div>
         ))}
       </div>
@@ -41,8 +43,14 @@ const BetList = ({ bets, api, selected }) => {
     return (
       <div className="px-4 mt-4 text-center grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-4">
         {bets.map((bet) => {
+          // I WOULD NORMALLY USE CLASSNAMES WITH THIS KIND OF LOGIC
+          // BUT I HAVE HIT THE NPM INSTALL LIMIT
           const bg = selected?.id === bet.id ? "bg-green-600" : "bg-gray-200"
+          // we only want the text to change when there is nothing seelcted
+          const textColor =
+            selected?.id === bet.id ? "text-white" : "text-green-600"
           const hover = selected ? "" : "hover:bg-green-600"
+          const hoverText = selected ? "" : "group-hover:text-white"
 
           return (
             <div
@@ -50,17 +58,23 @@ const BetList = ({ bets, api, selected }) => {
               className={`group ${bg} text-gray-800 ${hover} border-2 rounded p-8 text-center h-full w-full min-h-0`}
               onClick={() => (selected ? undefined : api.selectBet(bet.id))}
             >
-              <div className="text-green-600 group-hover:text-white text-lg pb-1">
+              <div className={`${textColor} ${hoverText} text-lg pb-1`}>
                 {bet.name}
               </div>
               <div className="text-sm font-light">{bet.startDate}</div>
-              <div className="text-green-600 group-hover:text-white text-xl font-semibold border-t-2 border-b-2 border-gray-400 my-4 py-2">
+              <div
+                className={`${textColor} ${hoverText} text-xl font-semibold border-t-2 border-b-2 border-gray-400 my-4 py-2`}
+              >
                 {bet.tagLine}
               </div>
-              <div className="text-green-600 group-hover:text-white text-lg font-semibold ">
+              <div
+                className={`${textColor} ${hoverText} text-lg font-semibold `}
+              >
                 {dollars(bet.baseValue, 0)} returns
               </div>
-              <div className="text-green-600 group-hover:text-white text-3xl font-semibold ">
+              <div
+                className={`${textColor} ${hoverText} text-3xl font-semibold `}
+              >
                 {dollars(bet.baseValue * bet.roiP)}
               </div>
             </div>
