@@ -7,7 +7,7 @@ import Header from "../components/header"
 import { dollars } from "../lib/utils"
 
 /**
- * Important to pass an API, these component sbhould have no idea they
+ * Important to pass an API, these component should have no idea they
  * are interacting with a state machine.
  * Makes them easy to test and reduces the spread of logic throughout the app.
  */
@@ -18,7 +18,7 @@ const GamesList = ({ games, api }) => {
         {games.map((game) => (
           <div
             key={game.id}
-            className="bg-gray-200 text-gray-800 hover:bg-indigo-200 rounded border-2 p-8 text-center"
+            className="bg-gray-200 text-gray-800 hover:bg-green-600 hover:text-white text-xl rounded border-2 p-8 text-center capitalize"
             onClick={() => api.selectGame(game.id)}
           >
             <div>{game.tagLine}</div>
@@ -37,25 +37,32 @@ const GamesList = ({ games, api }) => {
  * Hover and onClick events disabled when a current BET is selected
  */
 const BetList = ({ bets, api, selected }) => {
-  console.log(bets)
   if (Array.isArray(bets) && bets.length > 0) {
     return (
-      <div className="px-4 mt-8 text-center grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-4">
+      <div className="px-4 mt-4 text-center grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-4">
         {bets.map((bet) => {
-          const bg = selected?.id === bet.id ? "bg-indigo-200" : "bg-gray-200"
-          const hover = selected ? "" : "hover:bg-indigo-200"
+          const bg = selected?.id === bet.id ? "bg-green-600" : "bg-gray-200"
+          const hover = selected ? "" : "hover:bg-green-600"
 
           return (
             <div
               key={bet.id}
-              className={`${bg} text-gray-800 ${hover} border-2 rounded p-8 text-center h-full w-full min-h-0`}
+              className={`group ${bg} text-gray-800 ${hover} border-2 rounded p-8 text-center h-full w-full min-h-0`}
               onClick={() => (selected ? undefined : api.selectBet(bet.id))}
             >
-              <div>{bet.name}</div>
-              <div>{bet.startDate}</div>
-              <div>{bet.tagLine}</div>
-              <div>{dollars(bet.baseValue)} returns</div>
-              <div>{dollars(bet.baseValue * bet.roiP)}</div>
+              <div className="text-green-600 group-hover:text-white text-lg pb-1">
+                {bet.name}
+              </div>
+              <div className="text-sm font-light">{bet.startDate}</div>
+              <div className="text-green-600 group-hover:text-white text-xl font-semibold border-t-2 border-b-2 border-gray-400 my-4 py-2">
+                {bet.tagLine}
+              </div>
+              <div className="text-green-600 group-hover:text-white text-lg font-semibold ">
+                {dollars(bet.baseValue, 0)} returns
+              </div>
+              <div className="text-green-600 group-hover:text-white text-3xl font-semibold ">
+                {dollars(bet.baseValue * bet.roiP)}
+              </div>
             </div>
           )
         })}
@@ -69,6 +76,9 @@ const Stake = ({ children }) => (
   <div className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-tiny">
     {children}
   </div>
+)
+const PickBetHeader = () => (
+  <p className="text-center pt-4 md:pt-6 text-2xl md:text-4xl">Pick a bet</p>
 )
 
 const Home = () => {
@@ -85,7 +95,7 @@ const Home = () => {
     <Page>
       {state.matches("idle") || state.matches("loaded.gameListView") ? (
         <Header>
-          <h1 className="text-6xl">mkodo</h1>
+          <p className="">mkodo</p>
         </Header>
       ) : null}
       <div className="bg-gray-700 flex flex-col flex-grow min-h-screen pb-8">
@@ -108,7 +118,7 @@ const Home = () => {
         ) : null}
         {state.matches("loaded.gameSelected.betListView") ? (
           <>
-            <p className="text-center text-4xl pt-8">Pick a bet</p>
+            <PickBetHeader />
             <BetList
               bets={selectedGame?.bets || []}
               api={api}
@@ -118,7 +128,7 @@ const Home = () => {
         ) : null}
         {state.matches("loaded.gameSelected.betView") ? (
           <>
-            <p className="text-center text-4xl pt-8">Pick a bet</p>
+            <PickBetHeader />
             <BetList
               bets={selectedGame?.bets || []}
               api={api}
