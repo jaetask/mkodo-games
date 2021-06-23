@@ -47,6 +47,10 @@ const bettingGame = Machine({
           on: {
             SELECT_GAME: {
               target: "gameSelected",
+              actions: assign({
+                selectedGame: (context, event) =>
+                  context.games.find((x) => x.id === event.id),
+              }),
             },
           },
         },
