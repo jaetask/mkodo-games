@@ -4,7 +4,7 @@ import { useMachine } from "@xstate/react"
 import Button from "../components/button"
 import Page from "../components/page"
 import Header from "../components/header"
-import format from "date-fns/format"
+import { dollars } from "../lib/utils"
 
 /**
  * Important to pass an API, these component sbhould have no idea they
@@ -18,7 +18,7 @@ const GamesList = ({ games, api }) => {
         {games.map((game) => (
           <div
             key={game.id}
-            className="bg-gray-200 text-gray-800 hover:bg-gray-300 rounded border-2 p-8 text-center"
+            className="bg-gray-200 text-gray-800 hover:bg-indigo-200 rounded border-2 p-8 text-center"
             onClick={() => api.selectGame(game.id)}
           >
             <div>{game.tagLine}</div>
@@ -41,12 +41,14 @@ const BetList = ({ bets, api }) => {
         {bets.map((bet) => (
           <div
             key={bet.id}
-            className="bg-gray-200 text-gray-800 hover:bg-gray-300 border-2 rounded p-8 text-center h-full w-full min-h-0"
+            className="bg-gray-200 text-gray-800 hover:bg-indigo-200 border-2 rounded p-8 text-center h-full w-full min-h-0"
             onClick={() => api.selectBet(bet.id)}
           >
-            <div>{bet.description}</div>
-            <div>{format(new Date(bet.startDate), "YY")}</div>
             <div>{bet.name}</div>
+            <div>{bet.startDate}</div>
+            <div>{bet.tagLine}</div>
+            <div>{dollars(bet.baseValue)} returns</div>
+            <div>{dollars(bet.baseValue * bet.roiP)}</div>
           </div>
         ))}
       </div>
@@ -62,6 +64,8 @@ const Home = () => {
     loadGames: () => send("LOAD_GAMES"),
     selectGame: (id) => send({ type: "SELECT_GAME", id }),
     selectBet: (id) => send({ type: "SELECT_BET", id }),
+    back: () => send("BACK"),
+    next: () => send("NEXT"),
   }
   return (
     <Page>

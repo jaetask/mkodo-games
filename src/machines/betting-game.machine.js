@@ -44,6 +44,7 @@ const bettingGame = Machine({
       intiial: "gameListView",
       states: {
         gameListView: {
+          id: "gameListView",
           on: {
             SELECT_GAME: {
               target: "gameSelected",
@@ -58,20 +59,59 @@ const bettingGame = Machine({
           initial: "betListView",
           states: {
             betListView: {
+              id: "betListView",
               on: {
                 SELECT_BET: {
                   target: "betView",
+                },
+                BACK: {
+                  target: "#gameListView",
                 },
               },
             },
             betView: {
               initial: "chooseEntryLevel",
               states: {
-                chooseEntryLevel: {},
-                confirmEntryLevel: {},
-                validatePayment: {},
-                paymentValidated: {},
-                paymentValidationError: {},
+                chooseEntryLevel: {
+                  on: {
+                    BACK: {
+                      target: "#betListView",
+                    },
+                    NEXT: {
+                      target: "confirmEntryLevel",
+                    },
+                  },
+                },
+                confirmEntryLevel: {
+                  on: {
+                    BACK: {
+                      target: "chooseEntryLevel",
+                    },
+                    NEXT: {
+                      target: "validatePayment",
+                    },
+                  },
+                },
+                validatePayment: {
+                  on: {
+                    BACK: {
+                      target: "confirmEntryLevel",
+                    },
+                    NEXT: {
+                      target: "paymentValidated",
+                    },
+                  },
+                },
+                paymentValidated: {
+                  after: {
+                    3000: "#betListView",
+                  },
+                },
+                paymentValidationError: {
+                  after: {
+                    3000: "validatePayment",
+                  },
+                },
               },
             },
           },
