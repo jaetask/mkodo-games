@@ -33,33 +33,47 @@ const GamesList = ({ games, api }) => {
   return null
 }
 
-const BetList = ({ bets, api }) => {
+/**
+ * Hover and onClick events disabled when a current BET is selected
+ */
+const BetList = ({ bets, api, selected }) => {
   console.log(bets)
   if (Array.isArray(bets) && bets.length > 0) {
     return (
-      <div className="px-4 mt-8 text-center grid grid-flow-col grid-cols-2 grid-rows-2 gap-4">
-        {bets.map((bet) => (
-          <div
-            key={bet.id}
-            className="bg-gray-200 text-gray-800 hover:bg-indigo-200 border-2 rounded p-8 text-center h-full w-full min-h-0"
-            onClick={() => api.selectBet(bet.id)}
-          >
-            <div>{bet.name}</div>
-            <div>{bet.startDate}</div>
-            <div>{bet.tagLine}</div>
-            <div>{dollars(bet.baseValue)} returns</div>
-            <div>{dollars(bet.baseValue * bet.roiP)}</div>
-          </div>
-        ))}
+      <div className="px-4 mt-8 text-center grid grid-flow-row md:grid-flow-row md:grid-cols-2 gap-4">
+        {bets.map((bet) => {
+          const bg = selected?.id === bet.id ? "bg-indigo-200" : "bg-gray-200"
+          const hover = selected ? "" : "hover:bg-indigo-200"
+
+          return (
+            <div
+              key={bet.id}
+              className={`${bg} text-gray-800 ${hover} border-2 rounded p-8 text-center h-full w-full min-h-0`}
+              onClick={() => (selected ? undefined : api.selectBet(bet.id))}
+            >
+              <div>{bet.name}</div>
+              <div>{bet.startDate}</div>
+              <div>{bet.tagLine}</div>
+              <div>{dollars(bet.baseValue)} returns</div>
+              <div>{dollars(bet.baseValue * bet.roiP)}</div>
+            </div>
+          )
+        })}
       </div>
     )
   }
   return null
 }
 
+const Stake = ({ children }) => (
+  <div className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-tiny">
+    {children}
+  </div>
+)
+
 const Home = () => {
   const [state, send] = useMachine(bettingGame, { devTools: true })
-  const { games, selectedGame } = state.context
+  const { games, selectedGame, selectedBet } = state.context
   const api = {
     loadGames: () => send("LOAD_GAMES"),
     selectGame: (id) => send({ type: "SELECT_GAME", id }),
@@ -74,7 +88,7 @@ const Home = () => {
           <h1 className="text-6xl">mkodo</h1>
         </Header>
       ) : null}
-      <div className="bg-gray-700 w-full h-full">
+      <div className="bg-gray-700 flex flex-col flex-grow min-h-screen pb-8">
         {state.matches("idle") ? (
           <div className="text-center pt-8 w-full">
             <p className="mb-8">
@@ -95,8 +109,40 @@ const Home = () => {
         {state.matches("loaded.gameSelected.betListView") ? (
           <>
             <p className="text-center text-4xl pt-8">Pick a bet</p>
-            <BetList bets={selectedGame?.bets || []} api={api} />
+            <BetList
+              bets={selectedGame?.bets || []}
+              api={api}
+              selected={selectedBet}
+            />
           </>
+        ) : null}
+        {state.matches("loaded.gameSelected.betView") ? (
+          <>
+            <p className="text-center text-4xl pt-8">Pick a bet</p>
+            <BetList
+              bets={selectedGame?.bets || []}
+              api={api}
+              selected={selectedBet}
+            />
+          </>
+        ) : null}
+        {state.matches("loaded.gameSelected.betView.chooseEntryLevel") ? (
+          <div className="sticky inset-x-0 overflow-auto bottom-0 min-h-100 bg-gray-800 text-gray-200 p-4 text-xxs">
+            <div className="flex flex-row justify-between border-b-2 border-gray-200 py-2">
+              <div className="">{selectedBet.tagLine}</div>
+              <div className="">{dollars(selectedBet.baseValue)}</div>
+            </div>
+            <div className="flex flex-col py-2">
+              <div className="">Stake:</div>
+              <div className="flex flex-row justify-between">
+                <Stake>{dollars(5)}</Stake>
+                <Stake>{dollars(10)}</Stake>
+                <Stake>{dollars(20)}</Stake>
+                <Stake>{dollars(50)}</Stake>
+                <Stake>Other</Stake>
+              </div>
+            </div>
+          </div>
         ) : null}
       </div>
     </Page>

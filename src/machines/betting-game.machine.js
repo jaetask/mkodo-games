@@ -63,6 +63,10 @@ const bettingGame = Machine({
               on: {
                 SELECT_BET: {
                   target: "betView",
+                  actions: assign({
+                    selectedBet: (context, event) =>
+                      context.selectedGame.bets.find((x) => x.id === event.id),
+                  }),
                 },
                 BACK: {
                   target: "#gameListView",
