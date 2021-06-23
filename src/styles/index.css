@@ -1,0 +1,6 @@
+@import "tailwindcss/base";
+@import "./fontface.css";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
