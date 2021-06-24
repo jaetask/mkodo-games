@@ -18,15 +18,17 @@ const GamesList = ({ games, api }) => {
         {games.map((game) => (
           <div
             key={game.id}
-            className="bg-gray-200 text-gray-800 hover:bg-green-600 hover:text-white text-xl rounded border-2 p-8 text-center capitalize"
+            className="bg-gray-200 text-gray-800 hover:bg-green-600 hover:text-white text-xl rounded-3xl border-2 p-2 text-center capitalize"
             onClick={() => api.selectGame(game.id)}
           >
-            {/* TODO:
-            <div>{game.tagLine}</div>
-            <div>{game.image}</div>
-            <div>{game.name}</div>
-            <div>{game.description}</div> 
-            */}
+            <div className="text-xs p-1">{game.tagLine}</div>
+            <div className="text-3xl md:text-4xl font-black py-2">
+              {game.name}
+            </div>
+            <div className="text-xl md:text-2xl font-black py-1">
+              {game.brand}
+            </div>
+            <div className="text-xs p-1">{game.description}</div>
           </div>
         ))}
       </div>
@@ -55,7 +57,7 @@ const BetList = ({ bets, api, selected }) => {
           return (
             <div
               key={bet.id}
-              className={`group ${bg} text-gray-800 ${hover} border-2 rounded p-8 text-center h-full w-full min-h-0`}
+              className={`group ${bg} text-gray-800 ${hover} border-2 rounded-xl p-8 text-center h-full w-full min-h-0`}
               onClick={() => (selected ? undefined : api.selectBet(bet.id))}
             >
               <div className={`${textColor} ${hoverText} text-lg pb-1`}>
@@ -87,7 +89,7 @@ const BetList = ({ bets, api, selected }) => {
 }
 
 const Stake = ({ children }) => (
-  <div className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-tiny">
+  <div className="bg-gray-300 text-xs sm:text-base md:text-lg text-green-600 px-2 sm:px-8 md:px-10 py-1 md:py-2 mt-1 md:mt-2 rounded ">
     {children}
   </div>
 )

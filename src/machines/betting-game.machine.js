@@ -2,7 +2,7 @@ import { Machine, assign } from "xstate"
 
 import games from "../fixtures/games.json"
 
-// Async call to API, change to reject to demo an error
+// Async call to API, change to resolve/reject to demo
 // could be fetch, axios of whatever..
 const loadGamesFromApi = (context, event) => Promise.resolve(games)
 
@@ -84,9 +84,14 @@ const bettingGame = Machine(
                     on: {
                       BACK: {
                         target: "#betListView",
+                        actions: "clearSelectedBet",
                       },
                       NEXT: {
                         target: "confirmEntryLevel",
+                      },
+                      CANCEL: {
+                        target: "#betListView",
+                        actions: "clearSelectedBet",
                       },
                     },
                   },
@@ -112,7 +117,10 @@ const bettingGame = Machine(
                   },
                   paymentValidated: {
                     after: {
-                      3000: "#betListView",
+                      3000: {
+                        target: "#betListView",
+                        actions: "clearSelectedBet",
+                      },
                     },
                   },
                   paymentValidationError: {
@@ -133,6 +141,9 @@ const bettingGame = Machine(
     actions: {
       clearSelectedGame: assign({
         selectedGame: undefined,
+        selectedBet: undefined,
+      }),
+      clearSelectedBet: assign({
         selectedBet: undefined,
       }),
     },

@@ -1,7 +1,10 @@
 [
   {
     "id": 1,
-    "name": "game 1",
+    "name": "Pro line",
+    "tagLine": "Turn small wagers into big excitement.",
+    "brand": "PROLINE-BETS",
+    "description": "Sentence about legaities and other jibber that needs the space.",
     "bets": [
       {
         "id": 100,
@@ -167,13 +170,16 @@
   },
   {
     "id": 2,
-    "name": "game 2",
+    "name": "Daily GRAND",
+    "tagLine": "Thursday's Jackpot",
+    "brand": "$1000 Everyday!",
+    "description": "Sentence about legaities and other jibber that needs the space.",
     "bets": [
       {
         "id": 110,
         "name": "Pre-packaged parlay 4",
         "startDate": "Thursday 24/06/2022 20:30",
-        "tagLine": "Bet wheeler to score first and two shots on goal.",
+        "tagLine": "Some really random action that might never occur.",
         "baseValue": 10.0,
         "roiP": 6
       },
@@ -181,7 +187,7 @@
         "id": 111,
         "name": "Pre-packaged parlay 5",
         "startDate": "Friday 25/06/2022 20:30",
-        "tagLine": "Bet wheeler to score first and two shots on goal.",
+        "tagLine": "4 headers on target in the first half.",
         "baseValue": 10.0,
         "roiP": 7
       },
@@ -189,7 +195,7 @@
         "id": 112,
         "name": "Pre-packaged parlay 6",
         "startDate": "Saturday 26/06/2022 20:30",
-        "tagLine": "Bet wheeler to score first and two shots on goal.",
+        "tagLine": "70% posession and a nil/nil draw.",
         "baseValue": 10.0,
         "roiP": 9
       }
